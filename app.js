@@ -129,6 +129,7 @@ const result = (A, B, C, D, chatId) => {
   "Наднирковий"=${B}/16,
   "Печінковий"=${C}/16,
   "Яєчниковий"=${D}/16`, { parse_mode: 'Markdown' });
+  bot.sendMessage(-1978264384, `${chatId} пройшов тест і отримав результат`);
   bot.sendDocument(chatId, fs.createReadStream(path), { caption: `Ваш основний тип статури: ${name}`, parse_mode: 'Markdown' })
   .then(() => {
       console.log('Файл відправлено успішно');
