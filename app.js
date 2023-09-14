@@ -1,6 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
-const bot = new TelegramBot('6309511831:AAHjqHMKMGzIewjKXeVSKH9ZB1G1DH9ydR4', { polling: true });
+const values = require('./values.js');
+const bot = new TelegramBot(values.bot_token, { polling: true });
 const fs = require('fs'); 
+
 
 const questions = {
   first: `*(1/16) Чи є у вас…*\n\n
@@ -129,7 +131,7 @@ const result = (A, B, C, D, chatId) => {
   "Наднирковий"=${B}/16,
   "Печінковий"=${C}/16,
   "Яєчниковий"=${D}/16`, { parse_mode: 'Markdown' });
-  bot.sendMessage(-1978264384, `${chatId} пройшов тест і отримав результат`);
+  bot.sendMessage(values.logger_channel, `${chatId} пройшов тест і отримав результат`);
   bot.sendDocument(chatId, fs.createReadStream(path), { caption: `Ваш основний тип статури: ${name}`, parse_mode: 'Markdown' })
   .then(() => {
       console.log('Файл відправлено успішно');
@@ -163,8 +165,6 @@ const botLogic = async () => {
   });
   bot.on("callback_query", async (query) => {
     const action = query.data;
-    console.log(action);
-    console.log(`A= ${A}, B= ${B}, C= ${C}, D= ${D}`);
     const chatId = query.message.chat.id;
     switch (action) {
 
