@@ -1,7 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const values = require('./values.js');
 const bot = new TelegramBot(values.bot_token, { polling: true });
-const fs = require('fs'); 
 
 
 const questions = {
@@ -16,7 +15,7 @@ const questions = {
     С) буваєте роздратовані, не в дусі, бурчите зранку?\n\n
     D) буваєте не в дусі, роздратовані у певний період місяця?`,
   third: `*(3/16) Ви…* \n\n 
-    А) відчуваєтесебе краще споживаючи ірукти та ягоди?\n\n
+    А) відчуваєтесебе краще споживаючи фрукти та ягоди?\n\n
     В) потребуєте каву чи інші стимулятори, щоб прокинутися?\n\n
     С) відчуваєте відчуття стиснення праворуч у нижній частині живота або праворуч у грудній клітині?\n\n
     D) страждаєте закрепами під час місячного?`,
@@ -109,36 +108,25 @@ const result = (A, B, C, D, chatId) => {
   const number = Math.max(A,B,C,D);
   let path;
   let name;
-  switch (number) {
-    case A:
-      path = `${__dirname}/thyroid.pdf`;
-      name = '"Щитоподібний"';
-      break;
-    case B:
-      path = `${__dirname}/kidney.pdf`;
-      name = '"Наднирковий"';
-      break;
-    case C:
-      path = `${__dirname}/liver.pdf`;
-      name = '"Печінковий"';
-      break;
-    case D:
-      path = `${__dirname}/D.pdf`;
-      name = '"Яєчниковий"';
-  }
   bot.sendMessage(chatId, `*Ваш результат:*
   "Щитоподібний"=${A}/16,
   "Наднирковий"=${B}/16,
   "Печінковий"=${C}/16,
   "Яєчниковий"=${D}/16`, { parse_mode: 'Markdown' });
   bot.sendMessage(values.logger_channel, `${chatId} пройшов тест і отримав результат`);
-  bot.sendDocument(chatId, fs.createReadStream(path), { caption: `Ваш основний тип статури: ${name}`, parse_mode: 'Markdown' })
-  .then(() => {
-      console.log('Файл відправлено успішно');
-  })
-  .catch((error) => {
-      console.error('Помилка відправки файлу:', error);
-  });
+  switch (number) {
+    case A:
+      bot.sendMessage(chatId, `<a href="https://professional.skin/test_a">Щитоподібний</a>` , { parse_mode: 'HTML' });
+      break;
+    case B:
+      bot.sendMessage(chatId, `<a href="https://professional.skin/test_b">Наднирковий</a>` , { parse_mode: 'HTML' });
+      break;
+    case C:
+      bot.sendMessage(chatId, `<a href="https://professional.skin/test_c">Печінковий</a>` , { parse_mode: 'HTML' });
+      break;
+    case D:
+      bot.sendMessage(chatId, `<a href="https://professional.skin/test_d">Яєчниковий</a>` , { parse_mode: 'HTML' });
+  }
 }
 
 
